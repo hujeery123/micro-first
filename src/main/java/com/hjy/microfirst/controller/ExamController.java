@@ -1,15 +1,18 @@
 package com.hjy.microfirst.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.hjy.microfirst.domain.Book;
 import com.hjy.microfirst.entity.Person;
 import com.hjy.microfirst.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 描述信息：
@@ -28,13 +31,16 @@ public class ExamController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping
+    @RequestMapping(value = "/hello")
     public String hello(){
         logger.info("获取配置信息person:{}", person.getName());
-        Book book = new Book();
-        book.setName("测试书籍");
-        book.setCreateTime(new Date());
-        bookService.addBook(book);
+        PageInfo<Book> pageInfo = bookService.selectAllByParams(null);
+        List<Book> bookList = pageInfo.getList();
+        if (!CollectionUtils.isEmpty(bookList)) {
+            for (Book book : bookList) {
+                System.out.println(book.getName());
+            }
+        }
         return "hello";
     }
 
