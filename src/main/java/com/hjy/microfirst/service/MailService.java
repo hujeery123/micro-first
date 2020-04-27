@@ -1,6 +1,8 @@
 package com.hjy.microfirst.service;
 
 
+import java.util.Map;
+
 /**
  * 描述信息：邮件服务
  *
@@ -26,5 +28,14 @@ public interface MailService {
      * @Param fileArr 附件
      */
     void sendHtmlEmail(String destination, String subject, String text, String[] fileArr) throws Exception;
+
+    /**
+     * @Description  发送模板邮件
+     * @Author hjy
+     * @Date 2020/4/27 18:12
+     * @Param
+     * @return
+     */
+    void sendTemplateEmail(String destination, String subject, Map<String, Object> paramMap, String template) throws Exception;
 
 }

@@ -10,9 +10,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.Map;
 
 /**
  * 描述信息：邮件服务实现
@@ -27,6 +30,9 @@ public class MailServiceImpl implements MailService {
 
     @Value("${spring.mail.username}")
     private String from;
+
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -63,9 +69,17 @@ public class MailServiceImpl implements MailService {
                 }
             }
         }
-
         mailSender.send(message);
         logger.info("发送html邮件成功! des={}", destination);
+    }
 
+    @Override
+    public void sendTemplateEmail(String destination, String subject, Map<String, Object> paramMap, String template) throws Exception {
+        Context context = new Context();
+        // 设置变量的值
+        context.setVariables(paramMap);
+        String emailContent = templateEngine.process(template, context);
+        this.sendHtmlEmail(destination, subject, emailContent, null);
+        logger.info("【模版邮件】成功发送！paramsMap={}，template={}", paramMap, template);
     }
 }

@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 描述信息：
  *
@@ -39,4 +42,19 @@ class SendMailTests {
             System.out.println("发送html邮件失败");
         }
     }
+
+    @Test
+    public void sendTemplateMailTest() {
+        String to = "925789661@qq.com";
+        String subject = "163邮箱授权码";
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("username", "hujeery123");
+        paramMap.put("authCode", "1234");
+        try {
+            mailService.sendTemplateEmail(to, subject, paramMap, "RegisterSuccess");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
